@@ -3,7 +3,10 @@ package slog
 import (
 	"io"
 	"log"
+	"net/http"
 	"os"
+	"reflect"
+	"runtime"
 )
 
 var (
@@ -52,7 +55,7 @@ func (l *LogStruct) ErrorLog(str interface{}) {
 
 }
 
-func InfoLog(str interface{}) {
+func InfoLog(str ...interface{}) {
 	infofile, err := os.OpenFile("logs/info.log",
 		os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
@@ -76,4 +79,15 @@ func ErrorLog(str interface{}) {
 		log.Ldate|log.Ltime|log.Lshortfile)
 	Error.Panicln(str)
 
+}
+
+/**
+ * 监控函数日志
+ **/
+func FuncLog(h http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		name := runtime.FuncForPC(reflect.ValueOf(h).Pointer()).Name()
+		InfoLog("Handler function called - " + name)
+		h(w, r)
+	}
 }
