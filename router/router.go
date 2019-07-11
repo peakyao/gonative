@@ -16,8 +16,18 @@ func InitStaticDir(mux *http.ServeMux) {
 /**
  * 初始化路由
  **/
-func InitIndexRoute() {
+func InitRoute() {
 
 	http.Handle("/index", &controller.IndexController{})
 
+}
+
+/**
+ * 加载函数
+ **/
+func InitFuncRoute() {
+	http.HandleFunc("/index/login", controller.Login)
+	http.HandleFunc("/index/json", controller.JsonReturn)
+
+	http.HandleFunc("/basic/index", controller.Study)
 }

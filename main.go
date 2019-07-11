@@ -25,7 +25,10 @@ func main() {
 		// 	// Handler: &handler,
 		// 	Handler: mux,
 	}
-	router.InitIndexRoute()
+	router.InitRoute()
+
+	router.InitFuncRoute()
+
 	server.ListenAndServe()
 }
 
